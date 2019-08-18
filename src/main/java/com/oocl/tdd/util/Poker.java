@@ -9,6 +9,15 @@ import java.util.stream.Collectors;
 
 public class Poker {
 
+    public boolean isStraight(List<Card> cardList){
+        for (int i = 1; i < cardList.size(); i++) {
+            if(cardList.get(i).getNumber().getValue() != (cardList.get(i - 1).getNumber().getValue()  + 1)){
+                return false;
+            }
+        }
+        return true;
+    }
+
     public Map getCardListLevel(List<Card> cardList){
 
         return cardList.stream()
@@ -21,6 +30,9 @@ public class Poker {
     public String judgeWhoWin(List<Card> onePlayerCardList, List<Card> twoPlayerCardList) {
         onePlayerCardList.sort(Card::compareTo);
         twoPlayerCardList.sort(Card::compareTo);
+        if(isStraight(onePlayerCardList) != isStraight(twoPlayerCardList)){
+            return isStraight(onePlayerCardList) ? "1" : "2";
+        }
         Map<Integer, Integer> onePlayerCardListMap = getCardListLevel(onePlayerCardList);
         Map<Integer, Integer> twoPlayerCardListMap = getCardListLevel(twoPlayerCardList);
         int onePlayerCardMaxLevel = 0;
