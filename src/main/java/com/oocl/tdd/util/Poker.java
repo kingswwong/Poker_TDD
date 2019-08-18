@@ -9,6 +9,13 @@ import java.util.stream.Collectors;
 
 public class Poker {
 
+    public boolean isFlush(List<Card> cardList){
+        return cardList.stream()
+                .collect(Collectors.toMap(item -> item.getColor().getType(), item -> 1,Integer::sum))
+                .entrySet().stream()
+                .anyMatch(entry -> entry.getValue() == 5);
+    }
+
     public boolean isStraight(List<Card> cardList){
         for (int i = 1; i < cardList.size(); i++) {
             if(cardList.get(i).getNumber().getValue() != (cardList.get(i - 1).getNumber().getValue()  + 1)){
@@ -30,6 +37,9 @@ public class Poker {
     public String judgeWhoWin(List<Card> onePlayerCardList, List<Card> twoPlayerCardList) {
         onePlayerCardList.sort(Card::compareTo);
         twoPlayerCardList.sort(Card::compareTo);
+        if(isFlush(onePlayerCardList) != isFlush(twoPlayerCardList)){
+            return isFlush(onePlayerCardList) ? "1" : "2";
+        }
         if(isStraight(onePlayerCardList) != isStraight(twoPlayerCardList)){
             return isStraight(onePlayerCardList) ? "1" : "2";
         }
