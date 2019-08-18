@@ -6,36 +6,41 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Poker {
 
-    public boolean isStraightFlush(List<Card> cardList){
-        return isStraight(cardList) && isFlush(cardList);
-    }
-
-    public boolean isFourOfAKind(List<Card> cardList){
+    public Stream<Map.Entry<Integer, Integer>> getCardListNumberStream(List<Card> cardList){
         return cardList.stream()
                 .collect(Collectors.toMap(item -> item.getNumber().getValue(), item -> 1, Integer::sum))
-                .entrySet().stream()
+                .entrySet().stream();
+    }
+
+    public Stream<Map.Entry<String, Integer>> getCardListColorStream(List<Card> cardList){
+        return cardList.stream()
+                .collect(Collectors.toMap(item -> item.getColor().getType(), item -> 1, Integer::sum))
+                .entrySet().stream();
+    }
+
+    public boolean isStraightFlush(List<Card> cardList){
+        return isStraight(cardList) && isFlush(getCardListColorStream(cardList));
+    }
+
+    public boolean isFourOfAKind(Stream<Map.Entry<Integer, Integer>> cardNumberStream){
+        return cardNumberStream
                 .anyMatch(entry -> entry.getValue() == 4);
     }
 
 
-    public boolean isFullHouse(List<Card> cardList) {
-        return cardList.stream()
-                .collect(Collectors.toMap(item -> item.getNumber().getValue(), item -> 1, Integer::sum))
-                .entrySet().stream()
+    public boolean isFullHouse(Stream<Map.Entry<Integer, Integer>> cardNumberStream) {
+        return cardNumberStream
                 .anyMatch(entry -> entry.getValue() == 3) &&
-                cardList.stream()
-                        .collect(Collectors.toMap(item -> item.getNumber().getValue(), item -> 1, Integer::sum))
-                        .entrySet().stream()
+                cardNumberStream
                         .anyMatch(entry -> entry.getValue() == 2);
     }
 
-    public boolean isFlush(List<Card> cardList) {
-        return cardList.stream()
-                .collect(Collectors.toMap(item -> item.getColor().getType(), item -> 1, Integer::sum))
-                .entrySet().stream()
+    public boolean isFlush(Stream<Map.Entry<String, Integer>> cardNumberStream) {
+        return cardNumberStream
                 .anyMatch(entry -> entry.getValue() == 5);
     }
 
@@ -48,11 +53,9 @@ public class Poker {
         return true;
     }
 
-    public Map getCardListLevel(List<Card> cardList) {
+    public Map getCardListLevel(Stream<Map.Entry<Integer, Integer>> cardNumberStream) {
 
-        return cardList.stream()
-                .collect(Collectors.toMap(item -> item.getNumber().getValue(), item -> 1, Integer::sum))
-                .entrySet().stream()
+        return cardNumberStream
                 .filter(entry -> entry.getValue() > 1)
                 .collect(Collectors.toMap(item -> item.getKey(), item -> item.getValue()));
     }
@@ -60,23 +63,27 @@ public class Poker {
     public String judgeWhoWin(List<Card> onePlayerCardList, List<Card> twoPlayerCardList) {
         onePlayerCardList.sort(Card::compareTo);
         twoPlayerCardList.sort(Card::compareTo);
+        Stream<Map.Entry<Integer, Integer>> onePlayerCardNumberStream = getCardListNumberStream(onePlayerCardList);
+        Stream<Map.Entry<Integer, Integer>> twoPlayerCardNumberStream= getCardListNumberStream(twoPlayerCardList);
+        Stream<Map.Entry<String, Integer>> onePlayerCardColorStream= getCardListColorStream(twoPlayerCardList);
+        Stream<Map.Entry<String, Integer>> twoPlayerCardColorStream= getCardListColorStream(twoPlayerCardList);
         if(isStraightFlush(onePlayerCardList) != isStraightFlush(twoPlayerCardList)){
             return isStraightFlush(onePlayerCardList) ? "1" : "2";
         }
-        if (isFourOfAKind(onePlayerCardList) != isFourOfAKind(twoPlayerCardList)) {
-            return isFourOfAKind(onePlayerCardList) ? "1" : "2";
+        if (isFourOfAKind(onePlayerCardNumberStream) != isFourOfAKind(twoPlayerCardNumberStream)) {
+            return isFourOfAKind(twoPlayerCardNumberStream) ? "1" : "2";
         }
-        if (isFullHouse(onePlayerCardList) != isFullHouse(twoPlayerCardList)) {
-            return isFullHouse(onePlayerCardList) ? "1" : "2";
+        if (isFullHouse(onePlayerCardNumberStream) != isFullHouse(twoPlayerCardNumberStream)) {
+            return isFullHouse(onePlayerCardNumberStream) ? "1" : "2";
         }
-        if (isFlush(onePlayerCardList) != isFlush(twoPlayerCardList)) {
-            return isFlush(onePlayerCardList) ? "1" : "2";
+        if (isFlush(onePlayerCardColorStream) != isFlush(twoPlayerCardColorStream)) {
+            return isFlush(onePlayerCardColorStream) ? "1" : "2";
         }
         if (isStraight(onePlayerCardList) != isStraight(twoPlayerCardList)) {
             return isStraight(onePlayerCardList) ? "1" : "2";
         }
-        Map<Integer, Integer> onePlayerCardListMap = getCardListLevel(onePlayerCardList);
-        Map<Integer, Integer> twoPlayerCardListMap = getCardListLevel(twoPlayerCardList);
+        Map<Integer, Integer> onePlayerCardListMap = getCardListLevel(onePlayerCardNumberStream);
+        Map<Integer, Integer> twoPlayerCardListMap = getCardListLevel(twoPlayerCardNumberStream);
         int onePlayerCardMaxLevel = 0;
         int twoPlayerCardMaxLevel = 0;
         for (Integer key1 : onePlayerCardListMap.keySet()) {
