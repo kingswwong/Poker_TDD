@@ -71,7 +71,7 @@ public class PokerTest {
     }
 
     @Test
-    public void should_return_draw_when_given_2_player_card_value_is_3H3D5S9CKD_and_2_player_card_value_is_5D5S6CTD9D() {
+    public void should_return_2_when_given_2_player_card_value_is_3H3D5S9CKD_and_2_player_card_value_is_5D5S6CTD9D() {
 
         Poker poker = new Poker();
 
@@ -82,7 +82,7 @@ public class PokerTest {
     }
 
     @Test
-    public void should_return_draw_when_given_1_player_card_value_is_3H3D5S9CKD_and_2_player_card_value_is_3D3S6CTD9D() {
+    public void should_return_1_when_given_1_player_card_value_is_3H3D5S9CKD_and_2_player_card_value_is_3D3S6CTD9D() {
 
         Poker poker = new Poker();
 
@@ -91,4 +91,5 @@ public class PokerTest {
         assertEquals("1", poker.judgeWhoWin(onePlayerCardList, twoPlayerCardList));
 
     }
+    
 }
