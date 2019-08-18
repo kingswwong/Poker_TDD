@@ -5,7 +5,7 @@ import com.oocl.tdd.eenum.Num;
 
 import java.util.ArrayList;
 
-public class Card {
+public class Card implements Comparable<Card>{
 
     private Color color;
     private Num number;
@@ -47,5 +47,11 @@ public class Card {
             cardList.add(new Card(cardInfo));
         }
         return cardList;
+    }
+
+
+    @Override
+    public int compareTo(Card o) {
+        return this.getNumber().getValue() - o.getNumber().getValue();
     }
 }

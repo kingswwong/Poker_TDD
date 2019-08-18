@@ -7,6 +7,11 @@ import com.oocl.tdd.util.Poker;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import static org.junit.Assert.assertEquals;
+
 public class PokerTest {
 
     @Test
@@ -15,7 +20,7 @@ public class PokerTest {
         Card twoPlayerCard = new Card("2D");
 
         Poker poker = new Poker();
-        Assert.assertEquals("1", poker.judgeWhoWin(onePlayerCard, twoPlayerCard));
+        assertEquals("1", poker.judgeWhoWin(Arrays.asList(onePlayerCard), Arrays.asList(twoPlayerCard)));
     }
 
     @Test
@@ -24,7 +29,7 @@ public class PokerTest {
         Card twoPlayerCard = new Card("TD");
 
         Poker poker = new Poker();
-        Assert.assertEquals("1", poker.judgeWhoWin(onePlayerCard, twoPlayerCard));
+        assertEquals("1", poker.judgeWhoWin(Arrays.asList(onePlayerCard), Arrays.asList(twoPlayerCard)));
     }
 
     @Test
@@ -32,6 +37,28 @@ public class PokerTest {
         Card onePlayerCard = new Card("TD");
         Card twoPlayerCard = new Card("TD");
         Poker poker = new Poker();
-        Assert.assertEquals("draw", poker.judgeWhoWin(onePlayerCard, twoPlayerCard));
+        assertEquals("draw", poker.judgeWhoWin(Arrays.asList(onePlayerCard), Arrays.asList(twoPlayerCard)));
+    }
+
+    @Test
+    public void should_return_1_when_given_1_player_card_value_is_2H3D5S9CKD_and_2_player_card_value_is_3D4S6CTD9D() {
+
+        Poker poker = new Poker();
+
+        ArrayList<Card> onePlayerCardList = Card.generateCard("2H3D5S9CKD");
+        ArrayList<Card> twoPlayerCardList = Card.generateCard("3D4S6CTD9D");
+        assertEquals("1", poker.judgeWhoWin(onePlayerCardList, twoPlayerCardList));
+
+    }
+
+    @Test
+    public void should_return_draw_when_given_1_player_card_value_is_2H3D5S9CKD_and_2_player_card_value_is_2H5S9CKD3S() {
+
+        Poker poker = new Poker();
+
+        ArrayList<Card> onePlayerCardList = Card.generateCard("2H3D5S9CKD");
+        ArrayList<Card> twoPlayerCardList = Card.generateCard("3D4S6CTD9D");
+        assertEquals("1", poker.judgeWhoWin(onePlayerCardList, twoPlayerCardList));
+
     }
 }
