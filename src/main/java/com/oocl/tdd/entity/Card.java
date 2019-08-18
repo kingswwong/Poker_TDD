@@ -3,6 +3,8 @@ package com.oocl.tdd.entity;
 import com.oocl.tdd.eenum.Color;
 import com.oocl.tdd.eenum.Num;
 
+import java.util.ArrayList;
+
 public class Card {
 
     private Color color;
@@ -38,5 +40,12 @@ public class Card {
         this.number = number;
     }
 
-
+    public static ArrayList<Card> generateCard(String cardNums){
+        ArrayList<Card> cardList = new ArrayList<Card>();
+        for(int i = 0;i < cardNums.length();i+=2){
+            String cardInfo = cardNums.substring(i, i + 2);
+            cardList.add(new Card(cardInfo));
+        }
+        return cardList;
+    }
 }
