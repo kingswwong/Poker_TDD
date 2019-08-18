@@ -146,4 +146,15 @@ public class PokerTest {
         assertEquals("2", poker.judgeWhoWin(onePlayerCardList, twoPlayerCardList));
 
     }
+
+    @Test
+    public void should_return_2_when_given_1_player_card_value_is_5D8D9D3DTD_and_2_player_card_value_is_3H3D5S5C3D() {
+
+        Poker poker = new Poker();
+
+        ArrayList<Card> onePlayerCardList = Card.generateCard("5D8D9D3DTD");
+        ArrayList<Card> twoPlayerCardList = Card.generateCard("3H3D5S5C3D");
+        assertEquals("2", poker.judgeWhoWin(onePlayerCardList, twoPlayerCardList));
+
+    }
 }

@@ -9,6 +9,17 @@ import java.util.stream.Collectors;
 
 public class Poker {
 
+    public boolean isFullHouse(List<Card> cardList){
+        return cardList.stream()
+                .collect(Collectors.toMap(item -> item.getNumber().getValue(), item -> 1,Integer::sum))
+                .entrySet().stream()
+                .anyMatch(entry -> entry.getValue() == 3) &&
+                cardList.stream()
+                        .collect(Collectors.toMap(item -> item.getNumber().getValue(), item -> 1,Integer::sum))
+                        .entrySet().stream()
+                        .anyMatch(entry -> entry.getValue() == 2);
+    }
+
     public boolean isFlush(List<Card> cardList){
         return cardList.stream()
                 .collect(Collectors.toMap(item -> item.getColor().getType(), item -> 1,Integer::sum))
@@ -37,6 +48,9 @@ public class Poker {
     public String judgeWhoWin(List<Card> onePlayerCardList, List<Card> twoPlayerCardList) {
         onePlayerCardList.sort(Card::compareTo);
         twoPlayerCardList.sort(Card::compareTo);
+        if(isFullHouse(onePlayerCardList) != isFullHouse(twoPlayerCardList)){
+            return isFullHouse(onePlayerCardList) ? "1" : "2";
+        }
         if(isFlush(onePlayerCardList) != isFlush(twoPlayerCardList)){
             return isFlush(onePlayerCardList) ? "1" : "2";
         }
