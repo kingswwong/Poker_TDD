@@ -13,6 +13,15 @@ public class Card {
         this.number = number;
     }
 
+    public Card(String cardInfo) {
+        if(Character.isDigit(cardInfo.charAt(0))){
+            this.number = Num.getNumByValue(Integer.parseInt(cardInfo.charAt(0) + ""));
+        }else{
+            this.number = Num.valueOf(cardInfo.charAt(0) + "");
+        }
+        this.color = Color.valueOf(cardInfo.charAt(1) + "");
+    }
+
     public Color getColor() {
         return color;
     }
@@ -29,8 +38,5 @@ public class Card {
         this.number = number;
     }
 
-    public Card generateCard(String card){
-        return null;
-    }
 
 }
