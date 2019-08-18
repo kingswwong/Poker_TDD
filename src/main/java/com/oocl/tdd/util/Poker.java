@@ -23,8 +23,20 @@ public class Poker {
         twoPlayerCardList.sort(Card::compareTo);
         Map<Integer, Integer> onePlayerCardListMap = getCardListLevel(onePlayerCardList);
         Map<Integer, Integer> twoPlayerCardListMap = getCardListLevel(twoPlayerCardList);
-        if(onePlayerCardListMap.size() != twoPlayerCardListMap.size()){
-            return getCardListLevel(onePlayerCardList).size() > getCardListLevel(twoPlayerCardList).size() ? "1" : "2";
+        int onePlayerCardMaxLevel = 0;
+        int twoPlayerCardMaxLevel = 0;
+        for(Integer key1: onePlayerCardListMap.keySet()){
+            if(onePlayerCardListMap.get(key1) > onePlayerCardMaxLevel){
+                onePlayerCardMaxLevel = onePlayerCardListMap.get(key1);
+            }
+        }
+        for(Integer key2: twoPlayerCardListMap.keySet()){
+            if(twoPlayerCardListMap.get(key2) > twoPlayerCardMaxLevel){
+                twoPlayerCardMaxLevel = twoPlayerCardListMap.get(key2);
+            }
+        }
+        if(onePlayerCardMaxLevel != twoPlayerCardMaxLevel){
+            return onePlayerCardMaxLevel > twoPlayerCardMaxLevel ? "1" : "2";
         }
         for(Integer key1: onePlayerCardListMap.keySet()){
             int value1 = onePlayerCardListMap.get(key1);
