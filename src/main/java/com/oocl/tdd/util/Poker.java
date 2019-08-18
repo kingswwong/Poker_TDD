@@ -4,25 +4,37 @@ import com.oocl.tdd.entity.Card;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Poker {
 
-    public int getCardListLevel(List<Card> cardList){
+    public Map getCardListLevel(List<Card> cardList){
 
         return cardList.stream()
                 .collect(Collectors.toMap(item -> item.getNumber().getValue(), item -> 1,Integer::sum))
                 .entrySet().stream()
                 .filter(entry -> entry.getValue() > 1)
-                .map(entry -> entry.getKey())
-                .collect(Collectors.toList()).size();
+                .collect(Collectors.toMap(item -> item.getKey(), item -> item.getValue()));
     }
 
     public String judgeWhoWin(List<Card> onePlayerCardList, List<Card> twoPlayerCardList) {
         onePlayerCardList.sort(Card::compareTo);
         twoPlayerCardList.sort(Card::compareTo);
-        if(getCardListLevel(onePlayerCardList) != getCardListLevel(twoPlayerCardList)){
-            return getCardListLevel(onePlayerCardList) > getCardListLevel(twoPlayerCardList) ? "1" : "2";
+        Map<Integer, Integer> onePlayerCardListMap = getCardListLevel(onePlayerCardList);
+        Map<Integer, Integer> twoPlayerCardListMap = getCardListLevel(twoPlayerCardList);
+        if(onePlayerCardListMap.size() != twoPlayerCardListMap.size()){
+            return getCardListLevel(onePlayerCardList).size() > getCardListLevel(twoPlayerCardList).size() ? "1" : "2";
+        }
+        for(Integer key1: onePlayerCardListMap.keySet()){
+            int value1 = onePlayerCardListMap.get(key1);
+            for(Integer key2: twoPlayerCardListMap.keySet()){
+                if(twoPlayerCardListMap.get(key2) == value1){
+                    if(key1 != key2){
+                        return key1 > key2 ? "1" : "2";
+                    }
+                }
+            }
         }
         for(int i = onePlayerCardList.size() - 1;i >= 0;i--){
             if(onePlayerCardList.get(i).getNumber().getValue() != twoPlayerCardList.get(i).getNumber().getValue()){
