@@ -9,6 +9,10 @@ import java.util.stream.Collectors;
 
 public class Poker {
 
+    public boolean isStraightFlush(List<Card> cardList){
+        return isStraight(cardList) && isFlush(cardList);
+    }
+
     public boolean isFourOfAKind(List<Card> cardList){
         return cardList.stream()
                 .collect(Collectors.toMap(item -> item.getNumber().getValue(), item -> 1, Integer::sum))
@@ -56,6 +60,9 @@ public class Poker {
     public String judgeWhoWin(List<Card> onePlayerCardList, List<Card> twoPlayerCardList) {
         onePlayerCardList.sort(Card::compareTo);
         twoPlayerCardList.sort(Card::compareTo);
+        if(isStraightFlush(onePlayerCardList) != isStraightFlush(twoPlayerCardList)){
+            return isStraightFlush(onePlayerCardList) ? "1" : "2";
+        }
         if (isFourOfAKind(onePlayerCardList) != isFourOfAKind(twoPlayerCardList)) {
             return isFourOfAKind(onePlayerCardList) ? "1" : "2";
         }
