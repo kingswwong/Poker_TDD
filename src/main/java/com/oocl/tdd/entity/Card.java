@@ -10,10 +10,6 @@ public class Card implements Comparable<Card>{
     private Color color;
     private Num number;
 
-    public Card(Color color, Num number) {
-        this.color = color;
-        this.number = number;
-    }
 
     public Card(String cardInfo) {
         if(Character.isDigit(cardInfo.charAt(0))){
